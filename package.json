@@ -17,6 +17,7 @@
   "scripts": {
     "react-start": "react-scripts start",
     "start": "concurrently 'yarn react-start' 'wait-on http://localhost:3000 && electron build/electron.js'",
+    "winStart": "concurrently \"yarn react-start\" \"wait-on http://localhost:3000 && yarn electron .\\build\\electron.js\"",
     "electron-build": "electron-builder",
     "compile": "tsc -p tsconfig.electron.json",
     "build": "react-scripts build && yarn compile",
@@ -75,7 +76,7 @@
     "electron-pack": "^1.3.2",
     "electron-reload": "^1.5.0",
     "nodemon": "^2.0.7",
-    "typescript": "^4.0.3",
+    "typescript": "^4.1.3",
     "wait-on": "^5.2.1"
   }
 }
