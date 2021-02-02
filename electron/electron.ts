@@ -1,6 +1,7 @@
 import path from 'path'
 import isDev from'electron-is-dev'
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import fs from 'fs'
 
 export default class Main {
     static mainWindow: Electron.BrowserWindow;
@@ -31,7 +32,6 @@ export default class Main {
         });
         Main.mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
         Main.mainWindow.on('closed', Main.onClose);
-        console.log("hi")
     }
 
 
@@ -46,15 +46,22 @@ export default class Main {
         Main.application = app;
         Main.application.on('window-all-closed', Main.onWindowAllClosed);
         Main.application.on('ready', Main.onReady);
-        console.log("Changed Again")
         
         ipcMain.handle('APP_showDialog', (event, ...args) => {  
-            let paths : String[] = [] 
+            let dir : string = ''
+            var paths : string[] = []
+            
             dialog.showOpenDialog({properties: ['openDirectory']})
             .then((result) => {
-                paths = result.filePaths
-                console.log(paths[0])
-                event.sender.send('APP_dialogResponse', paths[0])
+                dir = result.filePaths[0]
+                fs.readdir(dir, (err, files) => {
+                    if (err) throw err;
+                    for (const file of files) {
+                        paths.push(path.join(dir, file))
+                    }
+                    
+                    event.sender.send('APP_dialogResponse', paths)
+                })
             })
             
         });
