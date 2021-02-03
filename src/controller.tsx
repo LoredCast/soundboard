@@ -24,7 +24,7 @@ const Controller : React.FunctionComponent = () => {
         localStorage.setItem('secondary_output', event.currentTarget.value)
     }
 
-    const loadOutputConfig = () => {
+    const loadConfig = () => {
         let output_1 = localStorage.getItem('primary_output')
         if (output_1) setSelectedPrimaryOutput(output_1)
 
@@ -37,7 +37,6 @@ const Controller : React.FunctionComponent = () => {
             }
         })
         
-
         let output_2 = localStorage.getItem('secondary_output')
         if (output_2) setSelectedSecondaryOutput(output_2)
 
@@ -49,28 +48,25 @@ const Controller : React.FunctionComponent = () => {
                 option.selected = true
             }
         })
+
+        let loaded_paths = localStorage.getItem("paths");
+        if (loaded_paths) setPaths(JSON.parse(loaded_paths))
+    
     }
 
-    useEffect(() => {
-        
-        
+    useEffect(() => {    
 
         navigator.mediaDevices.enumerateDevices()
             .then( devices => {
                 devices = devices.filter((output) => output.kind === "audiooutput")
                 setOutputs(devices)
-                loadOutputConfig()
+                loadConfig()
             })
         
-        
-
         myIpcRenderer.on('APP_dialogResponse', (result) => {
            setPaths(result)
-        })
-
-        
-        
-
+           localStorage.setItem("paths", JSON.stringify(result))
+        })        
     }, [])
     
     const handlePathSelection = () => {
