@@ -75,8 +75,8 @@ const Controller : React.FunctionComponent = () => {
     
 
     return(
-    <div>   
-
+    <div id="controller">   
+            <div id="config">
             <select onChange={ handlePrimaryOutputChange } ref={primaryRef}>
             {outputs && outputs.map((output, index) => 
                 <option key={index} value={ output.deviceId }>{ output.label }</option>  
@@ -90,14 +90,14 @@ const Controller : React.FunctionComponent = () => {
             </select>
             
             
-            <p>Selected Primary: {selectedPrimaryOutput} </p>
-            <p>Selected Secondary: { selectedSecondaryOutput } </p>
-            
             <button onClick={handlePathSelection}>Select Audio Folder</button>
 
+            </div>
+            <div id="pads">
             {paths && paths.map((path, index) => 
                 <Pad key={index} outputs={ [selectedPrimaryOutput, selectedSecondaryOutput] } source={path}></Pad>
             )}
+            </div>
     </div>
     )
 }

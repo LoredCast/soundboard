@@ -35,7 +35,7 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     <div>
         <audio ref={primaryAudioRef} src={ props.source }/>
         <audio ref={secondaryAudioRef} src={ props.source }/>
-        <button onClick={play}>{props.source}</button>
+        <button onClick={play} className="pad">{props.source}</button>
 
     </div>
     )

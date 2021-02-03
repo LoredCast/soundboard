@@ -27,12 +27,14 @@ export default class Main {
             webPreferences: {
                 nodeIntegration: false,
                 contextIsolation: true,
+                frame:false,
                 enableRemoteModule: false,
                 preload: path.join(__dirname, 'preload.js')
     } 
         });
         Main.mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
         Main.mainWindow.on('closed', Main.onClose);
+        //Main.mainWindow.removeMenu()
         console.log(app.getPath('userData'))
     }
 
@@ -76,6 +78,16 @@ export default class Main {
             })
             
         });
+
+        ipcMain.handle('APP_close', (event, ...args) => {
+            Main.mainWindow.close()
+        })
+
+
+        ipcMain.handle('APP_min', (event, ...args) => {
+            Main.mainWindow.minimize()
+        })
+
     }
 }
 
