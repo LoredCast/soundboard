@@ -2,6 +2,7 @@ import path from 'path'
 import isDev from'electron-is-dev'
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import fs from 'fs'
+import mime from 'mime'
 
 export default class Main {
     static mainWindow: Electron.BrowserWindow;
@@ -32,6 +33,7 @@ export default class Main {
         });
         Main.mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
         Main.mainWindow.on('closed', Main.onClose);
+        console.log(app.getPath('userData'))
     }
 
 
@@ -54,14 +56,23 @@ export default class Main {
             dialog.showOpenDialog({properties: ['openDirectory']})
             .then((result) => {
                 dir = result.filePaths[0]
-                fs.readdir(dir, (err, files) => {
-                    if (err) throw err;
-                    for (const file of files) {
-                        paths.push(path.join(dir, file))
-                    }
-                    
-                    event.sender.send('APP_dialogResponse', paths)
-                })
+
+                if (dir) {
+                    fs.readdir(dir, (err, files) => {
+                        if (err) {
+                            console.log(err)
+                        }
+                        for (const file of files) {
+                            let filePath = path.join(dir, file)
+                            if (mime.getType(filePath) === 'audio/mpeg') {
+                                paths.push(path.join(dir, file))
+                            }
+                        }
+                        event.sender.send('APP_dialogResponse', paths)
+                    })
+                }
+            }).catch((err) => {
+                console.log(err)
             })
             
         });

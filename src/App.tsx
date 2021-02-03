@@ -10,16 +10,13 @@ export interface ExtendedAudioElement extends HTMLAudioElement {
 }
 
 const App : React.FunctionComponent = () => {
-    const [path, setPath] = useState('no path selected')
     useEffect(() => {
         
     }, [])
 
     return(
         <div>
-            <p>{ path }</p>
             <Controller/>
-            <input type="file" accept="video/*"/>
         </div>
     )
 }
