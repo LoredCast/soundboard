@@ -1,6 +1,6 @@
 import path from 'path'
 import isDev from'electron-is-dev'
-import { app, BrowserWindow, ipcMain, dialog, desktopCapturer } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, desktopCapturer, nativeImage } from 'electron'
 import fs from 'fs'
 import mime from 'mime'
 
@@ -22,12 +22,14 @@ export default class Main {
 
     private static onReady() {
         Main.mainWindow = new Main.BrowserWindow({ 
-            width: 800, 
-            height: 600,
+            width: 1460, 
+            height: 1000,
+            minWidth: 760,
+            minHeight: 50,
+            frame: isDev ? true : false,
             webPreferences: {
                 nodeIntegration: false,
                 contextIsolation: true,
-                frame:false,
                 enableRemoteModule: false,
                 preload: path.join(__dirname, 'preload.js')
     } 
@@ -54,6 +56,7 @@ export default class Main {
         ipcMain.handle('APP_showDialog', (event, ...args) => {  
             let dir : string = ''
             var paths : string[] = []
+            var fileNames : string[] = []
             
             dialog.showOpenDialog({properties: ['openDirectory']})
             .then((result) => {
@@ -68,9 +71,16 @@ export default class Main {
                             let filePath = path.join(dir, file)
                             if (mime.getType(filePath) === 'audio/mpeg') {
                                 paths.push(path.join(dir, file))
+                                fileNames.push(file)
                             }
                         }
-                        event.sender.send('APP_dialogResponse', paths)
+
+                        let load = {
+                            paths: paths,
+                            fileNames: fileNames
+                        }
+
+                        event.sender.send('APP_dialogResponse', load)
                     })
                 }
             }).catch((err) => {

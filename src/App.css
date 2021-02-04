@@ -1,24 +1,36 @@
+html {
+  scroll-behavior: smooth;
+}
+
+:root::-webkit-scrollbar {
+    display: none;
+}
+
 body {
     font-size: 12px;
-    background-color: rgb(51, 51, 51);
-    color: rgb(230, 230, 230);
-    
+    background-color: #2e3440;
+    color: rgb(37, 57, 94);
+    margin-top: 5em;
 }
+
 
 header {
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-start;
-    background-color: #242424;
+    background-color: #2e3440;
     color: #ffffff;
     width: 100%;
     font-size: 2em;
+    position: fixed;
+    top: 0;
     -webkit-app-region: drag;
 }
 
 .option {
     padding: 5px 12px 5px 12px;
     cursor: pointer;
+    border: none;
     -webkit-app-region: no-drag;
 }
 
@@ -27,72 +39,90 @@ header {
 }
 
 .pad {
-    background-color: rgb(20, 153, 187);
+    background-color: #8fbcbb;
     border: none;
     border-radius: 10px;
     color: white;
     padding: 10px;
-    flex: 1 1 0;
+    width: 15vw;
+    height: 75px;
 }
 
 button {
-    background-color: rgb(41, 41, 41);
+    background-color: #3b4252;
     color: white;
     border: none;
     padding: 1em;
+    border-radius: 10px;
+    transition-duration: 150ms;
+    transition-timing-function: ease-out;
 }
 
 button:hover {
-    background-color: rgb(46, 46, 46);
+    background-color: #434c5e;
     cursor: pointer;
 }
 
 button:active {
-    background-color: rgb(41, 41, 41);
+    background-color: #3b4252;
 }
 
 .pad:hover {
-    background-color: rgb(27, 169, 204);
+    background-color: #d08770;
     cursor: pointer;
 }
 
 .pad:active {
-    background-color: rgb(20, 153, 187) ;
+    background-color:#af7360 ;
 }
+
+
+#controller {
+    display: block;
+}
+
+
 
 #pads {
     display: flex;
     flex-flow: row wrap;
-    
     column-gap: 10px;
     row-gap: 10px;
-    width: 100%;
-    margin: 0em;
-    align-items: stretch;
+    
 
-}
-
-#controller {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
+    border: solid rgba(255, 255, 255, 0.356) 1px;
+    border-radius: 10px;
     margin: 30px;
+    padding: 30px;
 }
+
 
 #config {
-    max-width: 20%;
-    margin-right: 30px;
+    max-width: 100%;
+    margin-bottom: 2em;
+    display: flex;
+    column-gap: 10px;
+    flex-wrap: wrap;
+    margin: 30px;
+    border: solid rgba(255, 255, 255, 0.356) 1px;
+    border-radius: 10px;
+    padding: 30px;
+    row-gap: 10px;
+}
 
+button {
+    min-width: 200px;
+    height: 50px;
 }
 
 select {
-    background-color: rgb(41, 41, 41);
+    background-color:#3b4252;
     color: white;
     border: none;
     border-radius: 10px;
     padding: 1em;
-    width: 100%;
-    margin-bottom: 10px;
+    height: 50px;
 }
 
 option {
@@ -102,4 +132,16 @@ option {
 
 *:focus {
     outline: none;
+}
+
+@media (min-width: 600px) {
+    .pad {
+        background-color: #8fbcbb;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 10px;
+        width: 10vw;
+        height: 75px;
+    }
 }

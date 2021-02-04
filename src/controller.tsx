@@ -6,6 +6,7 @@ const { myIpcRenderer } = window
 
 const Controller : React.FunctionComponent = () => {
     const [paths, setPaths] = useState<string[]>()
+    const [padNames, setPadNames] = useState<string[]>()
     const [outputs, setOutputs] = useState<MediaDeviceInfo[]>()
     const [selectedPrimaryOutput, setSelectedPrimaryOutput] = useState<string>('default')
     const [selectedSecondaryOutput, setSelectedSecondaryOutput] = useState<string>('default')
@@ -51,6 +52,9 @@ const Controller : React.FunctionComponent = () => {
 
         let loaded_paths = localStorage.getItem("paths");
         if (loaded_paths) setPaths(JSON.parse(loaded_paths))
+
+        let loaded_names = localStorage.getItem("names");
+        if (loaded_names) setPadNames(JSON.parse(loaded_names))
     
     }
 
@@ -64,8 +68,11 @@ const Controller : React.FunctionComponent = () => {
             })
         
         myIpcRenderer.on('APP_dialogResponse', (result) => {
-           setPaths(result)
-           localStorage.setItem("paths", JSON.stringify(result))
+           setPaths(result.paths)
+           setPadNames(result.fileNames)
+           localStorage.setItem("paths", JSON.stringify(result.paths))
+           localStorage.setItem("names", JSON.stringify(result.fileNames))
+
         })        
     }, [])
     
@@ -77,6 +84,7 @@ const Controller : React.FunctionComponent = () => {
     return(
     <div id="controller">   
             <div id="config">
+            <button onClick={handlePathSelection}>Select Audio Folder</button>
             <select onChange={ handlePrimaryOutputChange } ref={primaryRef}>
             {outputs && outputs.map((output, index) => 
                 <option key={index} value={ output.deviceId }>{ output.label }</option>  
@@ -90,12 +98,12 @@ const Controller : React.FunctionComponent = () => {
             </select>
             
             
-            <button onClick={handlePathSelection}>Select Audio Folder</button>
+            
 
             </div>
             <div id="pads">
             {paths && paths.map((path, index) => 
-                <Pad key={index} outputs={ [selectedPrimaryOutput, selectedSecondaryOutput] } source={path}></Pad>
+                <Pad key={index} outputs={ [selectedPrimaryOutput, selectedSecondaryOutput] } source={path} name={padNames && padNames[index]}></Pad>
             )}
             </div>
     </div>

@@ -8,6 +8,7 @@
     "email": "test@test.com"
   },
   "dependencies": {
+    "@types/dom-mediacapture-record": "^1.0.7",
     "@types/mime": "^2.0.3",
     "electron-is-dev": "^1.2.0",
     "mime": "^2.5.0",
@@ -30,6 +31,7 @@
     "electron-pack": "electron-builder --em.main=build/main.js"
   },
   "build": {
+    "icon" : "/build/icon.png",
     "appId": "com.example.electron-cra",
     "linux": {
       "target": [

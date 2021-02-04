@@ -3,7 +3,8 @@ import { ExtendedAudioElement } from './App'
 
 type padProps = {
     outputs : string[]
-    source: string
+    source: string,
+    name: string | undefined
 }
 
 const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
@@ -45,7 +46,7 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     <div>
         <audio ref={primaryAudioRef} src={ props.source } preload="auto"/>
         <audio ref={secondaryAudioRef} src={ props.source } preload="auto"/>
-        <button onClick={play} className="pad">{props.source}</button>
+        <button onClick={play} className="pad">{props.name && props.name.slice(0, props.name.indexOf('.mp3'))}</button>
 
     </div>
     )

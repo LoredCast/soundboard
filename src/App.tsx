@@ -10,6 +10,7 @@ export interface ExtendedAudioElement extends HTMLAudioElement {
 }
 
 const mediaDevices = navigator.mediaDevices as any;
+declare var MediaRecorder: any;
 
 const Menu : React.FunctionComponent = () => {
     const handleClose = () => {
@@ -27,74 +28,20 @@ const Menu : React.FunctionComponent = () => {
 }
 
 
-const constraints = {
-    
-}
-
 
 
 
 const App : React.FunctionComponent = () => {
-    const captureRef = useRef<HTMLVideoElement>(null)
-
-    const handleStream = (stream : any) => {
-        let audio = captureRef.current!
-
-        audio.srcObject = stream
-        audio.onloadedmetadata = (_) => audio.play()
-
-    }
-
-    const audioCapture = () => {
-
-        myIpcRenderer.getSources({ types: ['window', 'screen'] }).then(async sources => {
-            for (const source of sources) {
-
-                console.log(source)
-              if (source.name === "Entire Screen") {
-                try {
-                  const stream = await mediaDevices.getUserMedia({
-                    audio: {
-                        mandatory: {
-                            chromeMediaSource: 'desktop',
-                            chromeMediaSourceId: 'default'
-                        }
-                    },
-                    video: {
-                        mandatory: {
-                            chromeMediaSource: 'desktop',
-                            chromeMediaSourceId: source.id,
-                            minWidth: 500,
-                            maxWidth: 600,
-
-                        }
-                    }
-                  })
-
-                  handleStream(stream)
-                } catch (e) {
-                  console.log(e)
-                }
-                return
-              }
-            }
-          })
-    }
-
 
 
     useEffect(() => {
-        audioCapture()
-        navigator.mediaDevices.enumerateDevices().then((val) => {
-            console.log(val)
-        })
     }, [])
 
     return(
         <div>
             <Menu/>
             <Controller/>
-            <video controls ref= {captureRef}></video>
+
         </div>
 
     )
