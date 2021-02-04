@@ -20,8 +20,18 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     }
 
     const play = () => {
-        primaryAudioRef.current?.play()
-        secondaryAudioRef.current?.play()
+        if (primaryAudioRef.current?.paused) {
+            primaryAudioRef.current?.play()
+            secondaryAudioRef.current?.play()
+        } else {
+            primaryAudioRef.current?.pause()
+            primaryAudioRef.current!.currentTime = 0
+            secondaryAudioRef.current?.pause()
+            secondaryAudioRef.current!.currentTime = 0
+
+        }
+        
+        
     }
     
     useEffect(() =>{
@@ -33,8 +43,8 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
 
     return (
     <div>
-        <audio ref={primaryAudioRef} src={ props.source }/>
-        <audio ref={secondaryAudioRef} src={ props.source }/>
+        <audio ref={primaryAudioRef} src={ props.source } preload="auto"/>
+        <audio ref={secondaryAudioRef} src={ props.source } preload="auto"/>
         <button onClick={play} className="pad">{props.source}</button>
 
     </div>

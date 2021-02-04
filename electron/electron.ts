@@ -1,6 +1,6 @@
 import path from 'path'
 import isDev from'electron-is-dev'
-import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, desktopCapturer } from 'electron'
 import fs from 'fs'
 import mime from 'mime'
 
@@ -84,9 +84,13 @@ export default class Main {
         })
 
 
+
         ipcMain.handle('APP_min', (event, ...args) => {
             Main.mainWindow.minimize()
         })
+
+        
+        
 
     }
 }

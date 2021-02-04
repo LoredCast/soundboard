@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, desktopCapturer } = require('electron');
 
 function callIpcRenderer(method, channel, ...args) {
     if (typeof channel !== 'string' || !channel.startsWith('APP_')) {
@@ -22,10 +22,16 @@ function callIpcRenderer(method, channel, ...args) {
     }
 }
 
+function callMyCapturer(options, ...args) {
+    return desktopCapturer.getSources(options)
+}
+
+
 contextBridge.exposeInMainWorld(
     'myIpcRenderer', {
         invoke: (...args) => callIpcRenderer('invoke', ...args),
         send: (...args) => callIpcRenderer('send', ...args),
         on: (...args) => callIpcRenderer('on', ...args),
+        getSources: (...args) => callMyCapturer(...args)
     },
 );

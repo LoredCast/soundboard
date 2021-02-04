@@ -1,6 +1,7 @@
+import { DesktopCapturer }  from 'electron'
 declare global {
     interface Window {
-        myIpcRenderer: MyIpcRenderer,
+        myIpcRenderer: MyIpcRenderer
     }
 }
 
@@ -10,4 +11,10 @@ export interface MyIpcRenderer {
     
     /** @return A function that removes this listener. */
     on(channel: string, listener: (...args: any[]) => void): () => void;
+    
+    getSources(options: Electron.SourcesOptions): Promise<Electron.DesktopCapturerSource[]>;
+}
+
+export interface MyCapturer {
+  
 }
