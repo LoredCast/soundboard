@@ -2,7 +2,15 @@
 
 Simple Soundboard with a nice UI
 
-## How to develop
-Start by `yarn install`
+## Installation
+Download the Release Version of the Soundboard or build it from source with `yarn build` then `yarn electron-build`.
+Once the installation is finished, you'd probably want to add convenient functionality by adding a virtual input Device.
+This is neccessary because you want others to hear your own beautiful voice while blasting nickelback through Discord.
 
+### Virtual Audio for Windows
+1. Install Virtual VB Cable either through the release `VBCABLE_Driver_Pack.zip` or via the official site https://vb-audio.com/Cable/.
+2. Follow Steps for the Installer, make sure to run the installer as `administor` (`right click` `run as administor`) and reboot.
+3. You're now able to select Virtual Input in the Device selection in the soundboard program.
+4. Pipe your microphone through the Virtual Cable as well by going into the `sound control panel -> recording -> properties (right click on your mic) -> listen`. Now tick `Listen to this device` and select `CABLE Input`.
+5. Done! Now you can use `CABLE Output` in any app as device and others can hear your voice and the soundboard at the same time.
 
