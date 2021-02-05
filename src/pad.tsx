@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import { ExtendedAudioElement } from './App' 
 
 type padProps = {
@@ -10,7 +10,9 @@ type padProps = {
 const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     const primaryAudioRef = useRef<ExtendedAudioElement>(null) 
     const secondaryAudioRef = useRef<ExtendedAudioElement>(null)
-
+    const [showContext, setShowContext] = useState(false)
+    const [contextPos, setContextPos] = useState({})
+    
     const setPrimaryOutput = (output : string) => {
         primaryAudioRef.current?.setSinkId(output)
     }
@@ -34,6 +36,25 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
         
         
     }
+
+    const handleContext = (event : React.MouseEvent<HTMLButtonElement>) => {
+        setShowContext(true)
+        let x = event.clientX.toString()
+        let y = event.clientY.toString()
+        setContextPos({
+            left: x + 'px',
+            top: y + 'px'
+        })
+        console.log(contextPos)
+
+    }
+    const handleMouseOut = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (showContext) setShowContext(false)
+    }
+
+    const handleShortcut = () => {
+
+    }
     
     useEffect(() =>{
         setPrimaryOutput(props.outputs[0])
@@ -46,8 +67,16 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     <div>
         <audio ref={primaryAudioRef} src={ props.source } preload="auto"/>
         <audio ref={secondaryAudioRef} src={ props.source } preload="auto"/>
-        <button onClick={play} className="pad">{props.name && props.name.slice(0, props.name.indexOf('.mp3'))}</button>
-
+        <button onContextMenu={handleContext}
+                onClick={play} 
+                className="pad"
+                onMouseOut={handleMouseOut}>{props.name && props.name.slice(0, props.name.indexOf('.mp3'))}
+        </button>
+        {showContext && <div    className="contextMenu" 
+                                onClick={handleShortcut}
+                                style={contextPos}>
+                                Change Hotkey
+                        </div>}
     </div>
     )
 }
