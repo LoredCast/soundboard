@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect, useReducer } from 'react'
-import { ExtendedAudioElement } from './App'
+import React, { useRef, useState, useEffect } from 'react'
 import Pad from './pad'
 const { myIpcRenderer } = window
 
@@ -36,6 +35,7 @@ const Controller : React.FunctionComponent = () => {
             if (option.value === output_1) {
                 option.selected = true
             }
+            return 0
         })
         
         let output_2 = localStorage.getItem('secondary_output')
@@ -48,6 +48,7 @@ const Controller : React.FunctionComponent = () => {
             if (option.value === output_2) {
                 option.selected = true
             }
+            return 0
         })
 
         let loaded_paths = localStorage.getItem("paths");
@@ -96,8 +97,6 @@ const Controller : React.FunctionComponent = () => {
                 <option key={index} value={ output.deviceId }>{ output.label }</option>  
             )}
             </select>
-            
-            
             
 
             </div>

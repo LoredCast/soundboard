@@ -3,6 +3,12 @@ declare global {
     interface Window {
         myIpcRenderer: MyIpcRenderer
     }
+
+    interface ExtendedAudioElement extends HTMLAudioElement {
+	setSinkId: (sinkId: string) => Promise<void>;
+    }  
+     
+
 }
 
 export interface MyIpcRenderer {
@@ -15,6 +21,3 @@ export interface MyIpcRenderer {
     getSources(options: Electron.SourcesOptions): Promise<Electron.DesktopCapturerSource[]>;
 }
 
-export interface MyCapturer {
-  
-}

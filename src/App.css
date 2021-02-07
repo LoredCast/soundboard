@@ -135,7 +135,8 @@ option {
     background-color: #2e3440;
     padding: 0.5em;
     z-index: 1;
-    position: absolute;
+    top:-20px;
+    right:10px;
     box-shadow: #232831 0px 0px 20px;
 }
 

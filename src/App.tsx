@@ -1,16 +1,8 @@
 import './App.css';
-import React, {useEffect, useRef, useState} from 'react'
+import React from 'react'
 import Controller from './controller';
-import { chrome } from 'process';
 const { myIpcRenderer } = window
 
-
-export interface ExtendedAudioElement extends HTMLAudioElement {
-	setSinkId: (sinkId: string) => Promise<void>;
-}
-
-const mediaDevices = navigator.mediaDevices as any;
-declare var MediaRecorder: any;
 
 const Menu : React.FunctionComponent = () => {
     const handleClose = () => {
@@ -32,18 +24,11 @@ const Menu : React.FunctionComponent = () => {
 
 
 const App : React.FunctionComponent = () => {
-
-
-    useEffect(() => {
-    }, [])
-
     return(
         <div>
             <Menu/>
             <Controller/>
-
         </div>
-
     )
 }
 

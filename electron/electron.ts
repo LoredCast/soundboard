@@ -1,13 +1,18 @@
 import path from 'path'
 import isDev from'electron-is-dev'
-import { app, BrowserWindow, ipcMain, dialog, desktopCapturer, nativeImage } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, globalShortcut } from 'electron'
 import fs from 'fs'
 import mime from 'mime'
+import { IpcMainEvent } from 'electron/main'
+import { autoUpdater } from "electron-updater"
+
 
 export default class Main {
     static mainWindow: Electron.BrowserWindow;
     static application: Electron.App;
     static BrowserWindow;
+    static HotkeyEvent : IpcMainEvent
+
     private static onWindowAllClosed() {
         if (process.platform !== 'darwin') {
             Main.application.quit();
@@ -99,10 +104,39 @@ export default class Main {
             Main.mainWindow.minimize()
         })
 
-        
-        
+        ipcMain.on('APP_setkey', (event, ...args) => {
+            let hotkey = args[0]
+            
+            try {
+                globalShortcut.register(hotkey, () => {
+                    event.reply('APP_PressedHotkey', hotkey)
+                    console.log(hotkey)
+                })
+            } catch {
+                event.reply('APP_HotkeyReply', 'Failure')
+                console.log('Something went wrong')
+            }
+            
+        })
+
+        ipcMain.on('APP_unsetkey', (event, ...args) => {
+            try {
+                globalShortcut.unregister(args[0])
+            } catch {
+                console.log('Failed to unregister')
+            }
+        })
 
     }
+}
+
+class AppUpdater {
+  constructor() {
+    const log = require("electron-log")
+    log.transports.file.level = "debug"
+    autoUpdater.logger = log
+    autoUpdater.checkForUpdatesAndNotify()
+  }
 }
 
 

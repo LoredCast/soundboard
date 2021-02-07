@@ -7,7 +7,7 @@
       "esnext"
     ],
     "types": [
-        "node"
+        "node",
     ],
     "allowJs": true,
     "skipLibCheck": true,
