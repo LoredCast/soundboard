@@ -41,6 +41,7 @@ export default class Main {
         });
         Main.mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
         Main.mainWindow.on('closed', Main.onClose);
+        const updater = new AppUpdater()
         //Main.mainWindow.removeMenu()
         console.log(app.getPath('userData'))
     }
@@ -104,29 +105,33 @@ export default class Main {
             Main.mainWindow.minimize()
         })
 
-        ipcMain.on('APP_setkey', (event, ...args) => {
-            let hotkey = args[0]
-            
+        let keys : string[] = []
+        let names : string[] = []
+
+        ipcMain.on('APP_setkey', (event, key : string, title : string, ...args) => {
+            console.log(key)
+            console.log(title)
+            let keyIndex = names.indexOf(title)
+            if (keyIndex !== -1) {
+                try {
+                  globalShortcut.unregister(keys[keyIndex]) 
+                } catch {
+                    console.log("Failed")
+                }
+                keys[keyIndex] = key
+            } else {
+                names.push(title)
+                keys.push(key)
+            }
             try {
-                globalShortcut.register(hotkey, () => {
-                    event.reply('APP_PressedHotkey', hotkey)
-                    console.log(hotkey)
+                globalShortcut.register(key, () => {
+                        event.reply('APP_keypressed', key)
+                        console.log(key)
                 })
-            } catch {
-                event.reply('APP_HotkeyReply', 'Failure')
-                console.log('Something went wrong')
-            }
-            
-        })
-
-        ipcMain.on('APP_unsetkey', (event, ...args) => {
-            try {
-                globalShortcut.unregister(args[0])
-            } catch {
-                console.log('Failed to unregister')
+            } catch (error) {
+                console.log(error)
             }
         })
-
     }
 }
 

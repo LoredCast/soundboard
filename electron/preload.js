@@ -20,6 +20,7 @@ function callIpcRenderer(method, channel, ...args) {
         // return the value from `removeListener()`) to avoid exposing ipcRenderer.
         return () => { ipcRenderer.removeListener(channel, wrappedListener); };
     }
+        
 }
 
 function callMyCapturer(options, ...args) {

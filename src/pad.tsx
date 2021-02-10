@@ -5,18 +5,18 @@ type padProps = {
     outputs : string[]
     source: string,
     name: string | undefined
+    key: number
 }
 
 let keys : string[] = []
 
-
 const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     const primaryAudioRef = useRef<ExtendedAudioElement>(null) 
     const secondaryAudioRef = useRef<ExtendedAudioElement>(null)
-    const [buttonText, setButtonText] = useState<string>()
+    const [shortcutText, setShortcutText] = useState<string>()
     const [shortcut, setShortcut] = useState<string>('')
     const [buttonFocus, setButtonFocus] = useState<boolean>(false)
-    
+    const removeListenerRef = useRef<Function>()
 
     const setPrimaryOutput = (output : string) => {
         primaryAudioRef.current?.setSinkId(output)
@@ -36,82 +36,79 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
             primaryAudioRef.current!.currentTime = 0
             secondaryAudioRef.current?.pause()
             secondaryAudioRef.current!.currentTime = 0
-
         }
-        
     }
 
     const handleContext = (event : React.MouseEvent<HTMLButtonElement>) => {
-        
         setButtonFocus(true)
         keys = []
-        setButtonText('Recording...')
+        setShortcutText('Recording...')
 
     }
 
     const handleKeyDown = (event : React.KeyboardEvent<HTMLButtonElement>) => {
-        let keystring : string
-
-        if (buttonFocus) {
-            myIpcRenderer.send('APP_unsetkey', shortcut)
-            if (keys.length < 2) {
-                if (event.key === 'Control'){
-                    keys.push('CommandOrControl')
-                } if (event.key === 'Escape') {
-                    keys = []
-                    setButtonText('-')
-                    setShortcut('')
-                    props.name && localStorage.removeItem(props.name)
-                }
-                else {
-                    keys.push(event.key)
-                }
-                    
-            }
-            keystring = keys.join('+')
-            keystring && setButtonText(keystring) 
-            setShortcut(keystring)
-
-            myIpcRenderer.send('APP_setkey', keystring)
-            props.name && localStorage.setItem(props.name, keystring)
-
-            myIpcRenderer.on('APP_PressedHotkey', (args) => {
-                if (keystring === args) {
-                    play()
-                }
-            })
+       
+        if (buttonFocus && event.key === 'Escape') {
+            keys = []
+            setShortcut('')
+            setShortcutText("")
+            props.name && localStorage.removeItem(props.name)
+            myIpcRenderer.send('APP_setkey', '', props.name)
+            return
         }
+
+        if (buttonFocus && keys.length < 4) {
+            keys.push(event.key)
+            myIpcRenderer.send('APP_setkey', keys.join('+'), props.name)
+     
+            setShortcutText(keys.join('+'))
+            setShortcut(keys.join('+'))
+        }
+        
     }
     
     const loadHotkey = () => {
-        let key : string | null = ''
+        let key
         if (props.name) key = localStorage.getItem(props.name)
         if (key) {
-            myIpcRenderer.send('APP_setkey', key)
             setShortcut(key)
+            setShortcutText(key)
+            myIpcRenderer.send('APP_setkey', key, props.name)
         }
+
     }
 
+    useEffect(() => {
+        loadHotkey()
+    }, [props.name]) 
     
     useEffect(() =>{
-        loadHotkey()
         setPrimaryOutput(props.outputs[0])
         setSecondaryOutput(props.outputs[1])
-        setButtonText(props.name && props.name.slice(0, props.name.indexOf('.mp3')))
-    }, [props.outputs, props.name])
-
+    }, [props.outputs, props.name, shortcut])
+    
+    
+    useEffect(() => {
+        if (removeListenerRef.current) removeListenerRef.current()
+        shortcut && console.log(shortcut)
+        removeListenerRef.current = myIpcRenderer.on('APP_keypressed', (args : string) => {
+            if(shortcut === args) {
+                play()
+            }
+        })
+        props.name && shortcut && localStorage.setItem(props.name, shortcut)
+    }, [shortcut, props.name])
+   
 
     const handleButtonHover = (state: string) => {
         if (state === 'in') {
-            setButtonText(shortcut ? shortcut : 'Rightclick to enter hotkey')
+            setShortcutText('Rightclick to enter hotkey')
             
         }
         if (state === 'out') {
-            setButtonText(props.name && props.name.slice(0, props.name.indexOf('.mp3')))
+            setShortcutText(shortcut)
             setButtonFocus(false)
         }
-
-
     }
 
 
@@ -124,7 +121,9 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
                 onContextMenu={handleContext}
                 onMouseOut={() => handleButtonHover('out')}
                 onMouseEnter={() => handleButtonHover('in')}
-                onKeyDown={handleKeyDown}>{buttonText}
+                onKeyDown={handleKeyDown}>
+            {props.name && props.name.slice(0, props.name.indexOf('.mp3'))} <br/>
+            {shortcutText}
         </button>
     </div>
     )

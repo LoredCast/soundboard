@@ -12,6 +12,7 @@
     "@types/dom-mediacapture-record": "^1.0.7",
     "@types/mime": "^2.0.3",
     "electron-is-dev": "^1.2.0",
+    "electron-log": "^4.3.1",
     "electron-updater": "^4.3.5",
     "mime": "^2.5.0",
     "react": "^17.0.1",
@@ -33,7 +34,6 @@
     "electron-pack": "electron-builder --em.main=build/main.js"
   },
   "build": {
-    "icon": "/build/icon.png",
     "appId": "com.example.electron-cra",
     "linux": {
       "target": [
@@ -43,7 +43,9 @@
       ]
     },
     "win": {
-        "publish": ["github"]
+      "publish": [
+        "github"
+      ]
     },
     "files": [
       "build/**/*",
