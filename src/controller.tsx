@@ -9,6 +9,8 @@ const Controller : React.FunctionComponent = () => {
     const [outputs, setOutputs] = useState<MediaDeviceInfo[]>()
     const [selectedPrimaryOutput, setSelectedPrimaryOutput] = useState<string>('default')
     const [selectedSecondaryOutput, setSelectedSecondaryOutput] = useState<string>('default')
+    const [volume, setVolume] = useState<number>(1.0)
+    const [virtualVolume, setVirtualVolume] = useState<number>(1.0)
     const primaryRef = useRef<HTMLSelectElement>(null)
     const secondaryRef = useRef<HTMLSelectElement>(null)
 
@@ -80,33 +82,63 @@ const Controller : React.FunctionComponent = () => {
     const handlePathSelection = () => {
         myIpcRenderer.invoke('APP_showDialog')
     }
+
+    const handleVirtualVolumeChange = (e:React.FormEvent<HTMLInputElement>) => {
+        let val = parseFloat(e.currentTarget.value)/50 
+        setVirtualVolume(val)
+        e.currentTarget.style.background = 'linear-gradient(to right, #d08770 0%, #d08770 ' + val*100 + '%, #3b4252 ' + val*100 + '%, #3b4252 100%)'
+    
+    }
+    
+    const handleVolumeChange = (e:React.FormEvent<HTMLInputElement>) => {
+        let val = parseFloat(e.currentTarget.value)/50 
+        setVolume(val)
+        console.log(val*100)
+        e.currentTarget.style.background = 'linear-gradient(to right, #d08770 0%, #d08770 ' + val*100 + '%, #3b4252 ' + val*100 + '%, #3b4252 100%)'
+
+    }
     
 
     return(
     <div id="controller">   
+            <div id="settings">
             <div id="config">
             <button onClick={handlePathSelection}>Select Audio Folder</button>
+            
+            <div id="outputs">
             <select onChange={ handlePrimaryOutputChange } ref={primaryRef}>
             {outputs && outputs.map((output, index) => 
                 <option key={index} value={ output.deviceId }>{ output.label }</option>  
             )}
             </select>
-            
             <select onChange={ handleSecondaryOutputChange} ref={secondaryRef}>
             {outputs && outputs.map((output, index) => 
                 <option key={index} value={ output.deviceId }>{ output.label }</option>  
             )}
             </select>
-            
+            </div>
+                
+            </div>
 
+            <div id="sliderWrapper">
+                <div>
+                    <h2>Your Volume</h2>
+                <input className="slider" type="range" min="0" max="50" onInput={handleVolumeChange} ></input>
+                </div>
+                <div>
+                    <h2>Virtual Volume</h2>
+                <input className="slider"type="range" min="0" max="50" onInput={handleVirtualVolumeChange}></input>
+                </div>
+                </div>
             </div>
             <div id="pads">
             {paths && paths.map((path, index) => 
                 <Pad    key={index} 
                         outputs={ [selectedPrimaryOutput, selectedSecondaryOutput] } 
                         source={path} 
-                        name={padNames && padNames[index]}>
-                    
+                        name={padNames && padNames[index]}
+                        volume={volume}
+                        virtualVolume={virtualVolume}>
                 </Pad>
             )}
             </div>

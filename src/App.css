@@ -10,7 +10,12 @@ body {
     font-size: 12px;
     background-color: #2e3440;
     color: rgb(37, 57, 94);
-    margin-top: 5em;
+}
+
+h2 {
+    color: white;
+    font-size: 1em;
+    text-transform: uppercase;
 }
 
 
@@ -79,6 +84,9 @@ button:active {
 
 #controller {
     display: block;
+    padding: 0px;
+    margin: 30px;
+    padding-top: 2em;
 }
 
 
@@ -94,26 +102,35 @@ button:active {
     border: solid rgba(255, 255, 255, 0.356) 1px;
     border-radius: 10px;
     margin: 30px;
+    margin-left: 0;
+    margin-right: 0;
     padding: 30px;
 }
 
 
 #config {
-    max-width: 100%;
     margin-bottom: 2em;
     display: flex;
     column-gap: 10px;
-    flex-wrap: wrap;
-    margin: 30px;
+    flex-flow: column wrap;
+    margin-top: 0;
+    margin-bottom: 0;
     border: solid rgba(255, 255, 255, 0.356) 1px;
     border-radius: 10px;
     padding: 30px;
     row-gap: 10px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    justify-content: center;
 }
 
 button {
     min-width: 200px;
     height: 50px;
+}
+
+#config button {
+    min-width: 0;
 }
 
 select {
@@ -123,6 +140,7 @@ select {
     border-radius: 10px;
     padding: 1em;
     height: 50px;
+    width: 100%;
 }
 
 option {
@@ -130,28 +148,51 @@ option {
     padding: 1em;
 }
 
-.contextMenu {
-    color: white;
-    background-color: #2e3440;
-    padding: 0.5em;
-    z-index: 1;
-    top:-20px;
-    right:10px;
-    box-shadow: #232831 0px 0px 20px;
-}
 
 *:focus {
     outline: none;
 }
 
-@media (min-width: 600px) {
-    .pad {
-        background-color: #8fbcbb;
-        border: none;
-        border-radius: 10px;
-        color: white;
-        padding: 10px;
-        width: 10vw;
-        height: 75px;
-    }
+#sliderWrapper {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    padding: 30px;
+    border: solid rgba(255, 255, 255, 0.356) 1px;
+    border-radius: 10px;
+    
+}
+
+.slider {
+    width: 100%;
+    -webkit-appearance: none;  /* Override default CSS styles */
+    height: 20px; /* Specified height */
+    background: linear-gradient(to right,#d08770 0%, #d08770 100%, #3b4252 100%, #3b4252 100%);
+    border-radius: 5px;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px;
+    border-radius: 5px;
+    background: #e29178; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+  }
+
+#outputs {
+    display: flex;
+    flex-flow: row;
+    column-gap: 10px;
+}
+#settings {
+    display: grid;
+    grid-template-columns: auto auto 40%;
+    grid-template-rows: auto;
+    column-gap: 25px;
+}
+
+@media (min-width: 1200px) {
+    
 }

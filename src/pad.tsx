@@ -6,6 +6,8 @@ type padProps = {
     source: string,
     name: string | undefined
     key: number
+    volume: number
+    virtualVolume: number
 }
 
 let keys : string[] = []
@@ -98,7 +100,11 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
         })
         props.name && shortcut && localStorage.setItem(props.name, shortcut)
     }, [shortcut, props.name])
-   
+    
+    useEffect(() => {
+       primaryAudioRef.current!.volume = props.volume
+       secondaryAudioRef.current!.volume = props.virtualVolume
+    }, [props.volume, props.virtualVolume])
 
     const handleButtonHover = (state: string) => {
         if (state === 'in') {
