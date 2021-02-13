@@ -6,6 +6,11 @@ import mime from 'mime'
 import { IpcMainEvent } from 'electron/main'
 import { autoUpdater } from "electron-updater"
 
+class AppUpdater {
+  constructor() {
+    autoUpdater.checkForUpdatesAndNotify()
+  }
+}
 
 export default class Main {
     static mainWindow: Electron.BrowserWindow;
@@ -21,7 +26,7 @@ export default class Main {
 
     private static onClose() {
         // Dereference the window object. 
-        //Main.mainWindow = null;
+        // Main.mainWindow = null;
         console.log("closed")
     }
 
@@ -46,19 +51,12 @@ export default class Main {
         console.log(app.getPath('userData'))
     }
 
+    private static listenerFileSelection() {
+        // -------------------------------------
+        // Important handler for selecting the directory containing the audio files
+        // Response Object contains the Selection path and all the audio files in the dir
+        // -------------------------------------
 
-        
-
-    static main(app: Electron.App, browserWindow: typeof BrowserWindow) {
-        // we pass the Electron.App object and the  
-        // Electron.BrowserWindow into this function 
-        // so this class has no dependencies. This 
-        // makes the code easier to write tests for 
-        Main.BrowserWindow = browserWindow;
-        Main.application = app;
-        Main.application.on('window-all-closed', Main.onWindowAllClosed);
-        Main.application.on('ready', Main.onReady);
-        
         ipcMain.handle('APP_showDialog', (event, ...args) => {  
             let dir : string = ''
             var paths : string[] = []
@@ -73,6 +71,7 @@ export default class Main {
                         if (err) {
                             console.log(err)
                         }
+
                         for (const file of files) {
                             let filePath = path.join(dir, file)
                             if (mime.getType(filePath) === 'audio/mpeg') {
@@ -92,57 +91,71 @@ export default class Main {
             }).catch((err) => {
                 console.log(err)
             })
-            
         });
+    }
 
+
+    private static listenerClose() {
         ipcMain.handle('APP_close', (event, ...args) => {
             Main.mainWindow.close()
         })
+    }
 
 
-
+    private static listenerMin() {
         ipcMain.handle('APP_min', (event, ...args) => {
             Main.mainWindow.minimize()
         })
+    }
 
-        let keys : string[] = []
-        let names : string[] = []
+
+    private static listenerHotkey() {
+        let keys : string[] = [] // Keep track of keys 
+        let names : string[] = [] // Corrosponding File Names for Shortcuts
 
         ipcMain.on('APP_setkey', (event, key : string, title : string, ...args) => {
-            console.log(key)
-            console.log(title)
-            let keyIndex = names.indexOf(title)
+            
+            let keyIndex = names.indexOf(title) // Check if a Shortcut is already registered 
             if (keyIndex !== -1) {
                 try {
-                  globalShortcut.unregister(keys[keyIndex]) 
+                  globalShortcut.unregister(keys[keyIndex]) // delete old Hotkey
                 } catch {
                     console.log("Failed")
                 }
                 keys[keyIndex] = key
             } else {
-                names.push(title)
+                names.push(title) // If Hotkey is new, add it to the lists
                 keys.push(key)
             }
+
             try {
                 globalShortcut.register(key, () => {
-                        event.reply('APP_keypressed', key)
-                        console.log(key)
+                    event.reply('APP_keypressed', key)
                 })
             } catch (error) {
                 console.log(error)
             }
         })
     }
+
+        
+
+    static main(app: Electron.App, browserWindow: typeof BrowserWindow) {
+        // we pass the Electron.App object and the  
+        // Electron.BrowserWindow into this function 
+        // so this class has no dependencies. This 
+        // makes the code easier to write tests for 
+        Main.BrowserWindow = browserWindow;
+        Main.application = app;
+        Main.application.on('window-all-closed', Main.onWindowAllClosed);
+        Main.application.on('ready', Main.onReady);
+        this.listenerFileSelection()
+        this.listenerHotkey()
+        this.listenerClose()
+        this.listenerMin()
+    }
 }
 
-class AppUpdater {
-  constructor() {
-    const log = require("electron-log")
-    log.transports.file.level = "debug"
-    autoUpdater.logger = log
-    autoUpdater.checkForUpdatesAndNotify()
-  }
-}
 
 
 Main.main(app, BrowserWindow)

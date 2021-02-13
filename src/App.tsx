@@ -19,10 +19,6 @@ const Menu : React.FunctionComponent = () => {
     </header>)
 }
 
-
-
-
-
 const App : React.FunctionComponent = () => {
     return(
         <div>

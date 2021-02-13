@@ -10,20 +10,22 @@ type padProps = {
     virtualVolume: number
 }
 
-let keys : string[] = []
+let keys : string[] = [] // Could also be converted to variable ref inside component
 
 const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     const primaryAudioRef = useRef<ExtendedAudioElement>(null) 
     const secondaryAudioRef = useRef<ExtendedAudioElement>(null)
+
     const [shortcutText, setShortcutText] = useState<string>()
     const [shortcut, setShortcut] = useState<string>('')
+
     const [buttonFocus, setButtonFocus] = useState<boolean>(false)
     const removeListenerRef = useRef<Function>()
 
+    
     const setPrimaryOutput = (output : string) => {
         primaryAudioRef.current?.setSinkId(output)
     }
-
 
     const setSecondaryOutput = (output : string) => {
         secondaryAudioRef.current?.setSinkId(output)
@@ -49,22 +51,27 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     }
 
     const handleKeyDown = (event : React.KeyboardEvent<HTMLButtonElement>) => {
-       
+        // -------
+        // Main Method to record Shortcuts
+        // -------
+
         if (buttonFocus && event.key === 'Escape') {
             keys = []
             setShortcut('')
-            setShortcutText("")
+            setShortcutText('')
             props.name && localStorage.removeItem(props.name)
             myIpcRenderer.send('APP_setkey', '', props.name)
             return
         }
 
         if (buttonFocus && keys.length < 4) {
+            // Max Keybinding length is set to 4 in this case
             keys.push(event.key)
-            myIpcRenderer.send('APP_setkey', keys.join('+'), props.name)
-     
-            setShortcutText(keys.join('+'))
-            setShortcut(keys.join('+'))
+            let shortcutString = keys.join('+')
+
+            myIpcRenderer.send('APP_setkey', shortcutString, props.name)
+            setShortcutText(shortcutString)
+            setShortcut(shortcutString)
         }
         
     }
@@ -77,7 +84,6 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
             setShortcutText(key)
             myIpcRenderer.send('APP_setkey', key, props.name)
         }
-
     }
 
     useEffect(() => {
@@ -91,13 +97,14 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     
     
     useEffect(() => {
-        if (removeListenerRef.current) removeListenerRef.current()
-        shortcut && console.log(shortcut)
+        if (removeListenerRef.current) removeListenerRef.current() // Remove old listener
+
         removeListenerRef.current = myIpcRenderer.on('APP_keypressed', (args : string) => {
             if(shortcut === args) {
                 play()
             }
         })
+
         props.name && shortcut && localStorage.setItem(props.name, shortcut)
     }, [shortcut, props.name])
     
@@ -108,9 +115,9 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
 
     const handleButtonHover = (state: string) => {
         if (state === 'in') {
-            setShortcutText('Rightclick to enter hotkey')
-            
+            setShortcutText('Rightclick to enter hotkey') 
         }
+        
         if (state === 'out') {
             setShortcutText(shortcut)
             setButtonFocus(false)

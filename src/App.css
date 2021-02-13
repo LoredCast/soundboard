@@ -192,7 +192,3 @@ option {
     grid-template-rows: auto;
     column-gap: 25px;
 }
-
-@media (min-width: 1200px) {
-    
-}

@@ -7,10 +7,13 @@ const Controller : React.FunctionComponent = () => {
     const [paths, setPaths] = useState<string[]>()
     const [padNames, setPadNames] = useState<string[]>()
     const [outputs, setOutputs] = useState<MediaDeviceInfo[]>()
+    
     const [selectedPrimaryOutput, setSelectedPrimaryOutput] = useState<string>('default')
     const [selectedSecondaryOutput, setSelectedSecondaryOutput] = useState<string>('default')
+    
     const [volume, setVolume] = useState<number>(1.0)
     const [virtualVolume, setVirtualVolume] = useState<number>(1.0)
+    
     const primaryRef = useRef<HTMLSelectElement>(null)
     const secondaryRef = useRef<HTMLSelectElement>(null)
 
@@ -62,6 +65,9 @@ const Controller : React.FunctionComponent = () => {
     }
 
     useEffect(() => {    
+        // -------------------------------
+        // Primary Entrypoint: Loads all Devices and the directory selection
+        // -------------------------------
 
         navigator.mediaDevices.enumerateDevices()
             .then( devices => {
@@ -84,17 +90,16 @@ const Controller : React.FunctionComponent = () => {
     }
 
     const handleVirtualVolumeChange = (e:React.FormEvent<HTMLInputElement>) => {
-        let val = parseFloat(e.currentTarget.value)/50 
+        let val = parseFloat(e.currentTarget.value)/50  // Scale Input to 0.0 - 1.0
         setVirtualVolume(val)
-        e.currentTarget.style.background = 'linear-gradient(to right, #d08770 0%, #d08770 ' + val*100 + '%, #3b4252 ' + val*100 + '%, #3b4252 100%)'
+        e.currentTarget.style.background = 'linear-gradient(to right, #d08770 0%, #d08770 ' + val*100 + '%, #3b4252 ' + val*100 + '%, #3b4252 100%)' // Just CSS Stuff to make the slider work
     
     }
     
     const handleVolumeChange = (e:React.FormEvent<HTMLInputElement>) => {
-        let val = parseFloat(e.currentTarget.value)/50 
+        let val = parseFloat(e.currentTarget.value)/50  // Scale Input to 0.0 - 1.0
         setVolume(val)
-        console.log(val*100)
-        e.currentTarget.style.background = 'linear-gradient(to right, #d08770 0%, #d08770 ' + val*100 + '%, #3b4252 ' + val*100 + '%, #3b4252 100%)'
+        e.currentTarget.style.background = 'linear-gradient(to right, #d08770 0%, #d08770 ' + val*100 + '%, #3b4252 ' + val*100 + '%, #3b4252 100%)' // Just CSS Stuff to make the slider work
 
     }
     
@@ -102,45 +107,51 @@ const Controller : React.FunctionComponent = () => {
     return(
     <div id="controller">   
             <div id="settings">
-            <div id="config">
-            <button onClick={handlePathSelection}>Select Audio Folder</button>
+
+
+                <div id="config">
+                    <button onClick={handlePathSelection}>Select Audio Folder</button>
+                    <div id="outputs">
+                        <select onChange={ handlePrimaryOutputChange } ref={primaryRef}>
+                            {outputs && outputs.map((output, index) => 
+                                <option key={index} value={ output.deviceId }>{ output.label }</option>  
+                            )}
+                        </select>
+
+                        <select onChange={ handleSecondaryOutputChange} ref={secondaryRef}>
+                            {outputs && outputs.map((output, index) => 
+                                <option key={index} value={ output.deviceId }>{ output.label }</option>  
+                            )}
+                        </select>
+                    </div>
+                </div>
+
+
+                <div id="sliderWrapper">
+                    <div>
+                        <h2>Your Volume</h2>
+                        <input className="slider" type="range" min="0" max="50" onInput={handleVolumeChange} ></input>
+                    </div>
+                    <div>
+                        <h2>Virtual Volume</h2>
+                        <input className="slider"type="range" min="0" max="50" onInput={handleVirtualVolumeChange}></input>
+                    </div>
+                </div>
             
-            <div id="outputs">
-            <select onChange={ handlePrimaryOutputChange } ref={primaryRef}>
-            {outputs && outputs.map((output, index) => 
-                <option key={index} value={ output.deviceId }>{ output.label }</option>  
-            )}
-            </select>
-            <select onChange={ handleSecondaryOutputChange} ref={secondaryRef}>
-            {outputs && outputs.map((output, index) => 
-                <option key={index} value={ output.deviceId }>{ output.label }</option>  
-            )}
-            </select>
-            </div>
-                
+            
             </div>
 
-            <div id="sliderWrapper">
-                <div>
-                    <h2>Your Volume</h2>
-                <input className="slider" type="range" min="0" max="50" onInput={handleVolumeChange} ></input>
-                </div>
-                <div>
-                    <h2>Virtual Volume</h2>
-                <input className="slider"type="range" min="0" max="50" onInput={handleVirtualVolumeChange}></input>
-                </div>
-                </div>
-            </div>
+
             <div id="pads">
-            {paths && paths.map((path, index) => 
-                <Pad    key={index} 
-                        outputs={ [selectedPrimaryOutput, selectedSecondaryOutput] } 
-                        source={path} 
-                        name={padNames && padNames[index]}
-                        volume={volume}
-                        virtualVolume={virtualVolume}>
-                </Pad>
-            )}
+                {paths && paths.map((path, index) => 
+                    <Pad    key={index} 
+                            outputs={ [selectedPrimaryOutput, selectedSecondaryOutput] } 
+                            source={path} 
+                            name={padNames && padNames[index]}
+                            volume={volume}
+                            virtualVolume={virtualVolume}>
+                    </Pad>
+                )}
             </div>
     </div>
     )
