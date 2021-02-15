@@ -2,6 +2,8 @@
 
 Simple Soundboard with a nice UI
 
+![Image](./img/ui.png)
+
 ## Installation
 Download the Release Version of the Soundboard or build it from source with `yarn build` then `yarn electron-build`.
 Once the installation is finished, you'd probably want to add convenient functionality by adding a virtual input Device.
