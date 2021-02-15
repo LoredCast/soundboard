@@ -5,7 +5,24 @@ Simple Soundboard with a nice Nord UI
 ![Image](./img/ui.png)
 
 ## Installation
-Download the Release Version of the Soundboard or build it from source with `yarn build` then `yarn electron-build`.
+
+#### Building from Source
+Because the release is not signed, its probably better to build from source.
+`git clone` the source code to your machine. Make sure to have `yarn` installed, then in the directory:
+
+```
+yarn install
+yarn build
+yarn electron-build
+```
+
+Installation files can now be found in the `/dist` folder.
+
+#### Download the Installer
+If you trust my code and just want an `.exe`, there is an installer in the realeses section.
+
+---
+
 Once the installation is finished, you'd probably want to add convenient functionality by adding a virtual input Device.
 This is neccessary because you want others to hear your own beautiful voice while blasting nickelback through Discord.
 
