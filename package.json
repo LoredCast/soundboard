@@ -34,6 +34,7 @@
     "electron-pack": "electron-builder --em.main=build/main.js"
   },
   "build": {
+      "icon": "/build/icon.png",
     "appId": "com.example.electron-cra",
     "linux": {
       "target": [
@@ -45,6 +46,12 @@
     "win": {
       "publish": [
         "github"
+      ],
+      "target" : [
+          {
+              "target": "nsis",
+            "arch" : "ia32"
+        }
       ]
     },
     "files": [
