@@ -1,6 +1,6 @@
 # Electron Soundboard
 
-Simple Soundboard with a nice UI
+Simple Soundboard with a nice Nord UI
 
 ![Image](./img/ui.png)
 
