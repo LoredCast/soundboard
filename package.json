@@ -45,7 +45,7 @@
       ]
     },
     "win": {
-    "publihserName": "Manuel",
+        "publisherName": "Manuel",
       "publish": [
         "github"
       ],
