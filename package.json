@@ -1,6 +1,6 @@
 {
   "name": "soundboard",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "homepage": "./",
   "typings": "types.d.ts",
@@ -35,6 +35,7 @@
   },
   "build": {
     "icon": "/build/icon.png",
+    "publisherName" : "Manuel",
     "appId": "com.example.electron-cra",
     "linux": {
       "target": [
