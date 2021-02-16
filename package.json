@@ -35,7 +35,6 @@
   },
   "build": {
     "icon": "/build/icon.png",
-    "publisherName" : "Manuel",
     "appId": "com.example.electron-cra",
     "linux": {
       "target": [
@@ -45,7 +44,7 @@
       ]
     },
     "win": {
-        "publisherName": "Manuel",
+        	"publisherName": "Manuel",
       "publish": [
         "github"
       ],
