@@ -1,10 +1,16 @@
 import './App.css';
 import React from 'react'
-import Controller from './controller';
+import Controller from './controller'
 const { myIpcRenderer } = window
 
 
+
+
+
+
 const Menu : React.FunctionComponent = () => {
+
+
     const handleClose = () => {
         myIpcRenderer.invoke('APP_close')
     }
@@ -19,7 +25,11 @@ const Menu : React.FunctionComponent = () => {
     </header>)
 }
 
+
+
 const App : React.FunctionComponent = () => {
+    
+
     return(
         <div>
             <Menu/>

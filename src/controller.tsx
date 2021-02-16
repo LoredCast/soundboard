@@ -1,6 +1,9 @@
+import { readlink } from 'fs'
 import React, { useRef, useState, useEffect } from 'react'
 import Pad from './pad'
+import Recorder from './Recorder'
 const { myIpcRenderer } = window
+
 
 
 const Controller : React.FunctionComponent = () => {
@@ -68,6 +71,8 @@ const Controller : React.FunctionComponent = () => {
         // -------------------------------
         // Primary Entrypoint: Loads all Devices and the directory selection
         // -------------------------------
+        let dir = localStorage.getItem('dir')
+        if (dir) myIpcRenderer.send('APP_listFiles', dir)
 
         navigator.mediaDevices.enumerateDevices()
             .then( devices => {
@@ -76,9 +81,10 @@ const Controller : React.FunctionComponent = () => {
                 loadConfig()
             })
         
-        myIpcRenderer.on('APP_dialogResponse', (result) => {
+        myIpcRenderer.on('APP_listedFiles', (result) => {
            setPaths(result.paths)
            setPadNames(result.fileNames)
+           localStorage.setItem("dir", result.dir)
            localStorage.setItem("paths", JSON.stringify(result.paths))
            localStorage.setItem("names", JSON.stringify(result.fileNames))
 
@@ -137,6 +143,8 @@ const Controller : React.FunctionComponent = () => {
                         <input className="slider"type="range" min="0" max="50" onInput={handleVirtualVolumeChange}></input>
                     </div>
                 </div>
+
+                <Recorder></Recorder>
             
             
             </div>

@@ -11,6 +11,7 @@ declare global {
 
 }
 
+
 export interface MyIpcRenderer {
     invoke(channel: string, ...args: any[]): Promise<any>;
     send(channel: string, ...args: any[]): void;
@@ -20,4 +21,5 @@ export interface MyIpcRenderer {
     
     getSources(options: Electron.SourcesOptions): Promise<Electron.DesktopCapturerSource[]>;
 }
+
 

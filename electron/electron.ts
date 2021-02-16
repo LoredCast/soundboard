@@ -6,6 +6,8 @@ import mime from 'mime'
 import { IpcMainEvent } from 'electron/main'
 import { autoUpdater } from "electron-updater"
 
+const fspromise = fs.promises
+
 class AppUpdater {
   constructor() {
     autoUpdater.checkForUpdatesAndNotify()
@@ -51,6 +53,39 @@ export default class Main {
         console.log(app.getPath('userData'))
     }
 
+    private static async listAudioFiles(dir : string) {
+        let paths = []
+        let fileNames = []
+
+        await fspromise.readdir(dir).then((files)  => {
+            for (const file of files) {
+                let filePath = path.join(dir, file)
+                if (mime.getType(filePath) === 'audio/mpeg' || mime.getType(filePath) === 'audio/wav') {
+                    paths.push(path.join(dir, file))
+                    fileNames.push(file)
+                }
+            }
+            
+        })
+
+        return [paths, fileNames]
+    
+    }
+
+    private static listenerListFiles() {
+        ipcMain.on('APP_listFiles', (event, dir) => {
+            this.listAudioFiles(dir).then(([paths, files]) => {
+                let load = {
+                    dir: dir, 
+                    paths: paths,
+                    fileNames: files
+                }
+
+                event.sender.send('APP_listedFiles', load)
+            })
+        })
+    }
+
     private static listenerFileSelection() {
         // -------------------------------------
         // Important handler for selecting the directory containing the audio files
@@ -59,33 +94,19 @@ export default class Main {
 
         ipcMain.handle('APP_showDialog', (event, ...args) => {  
             let dir : string = ''
-            var paths : string[] = []
-            var fileNames : string[] = []
-            
+
             dialog.showOpenDialog({properties: ['openDirectory']})
             .then((result) => {
                 dir = result.filePaths[0]
-
                 if (dir) {
-                    fs.readdir(dir, (err, files) => {
-                        if (err) {
-                            console.log(err)
-                        }
-
-                        for (const file of files) {
-                            let filePath = path.join(dir, file)
-                            if (mime.getType(filePath) === 'audio/mpeg') {
-                                paths.push(path.join(dir, file))
-                                fileNames.push(file)
-                            }
-                        }
-
+                    this.listAudioFiles(dir).then(([paths, files]) => {
                         let load = {
+                            dir: dir,
                             paths: paths,
-                            fileNames: fileNames
+                            fileNames: files
                         }
 
-                        event.sender.send('APP_dialogResponse', load)
+                        event.sender.send('APP_listedFiles', load)
                     })
                 }
             }).catch((err) => {
@@ -113,20 +134,32 @@ export default class Main {
         let keys : string[] = [] // Keep track of keys 
         let names : string[] = [] // Corrosponding File Names for Shortcuts
 
+        let bindings = []
+
         ipcMain.on('APP_setkey', (event, key : string, title : string, ...args) => {
             
             let keyIndex = names.indexOf(title) // Check if a Shortcut is already registered 
-            if (keyIndex !== -1) {
-                try {
-                  globalShortcut.unregister(keys[keyIndex]) // delete old Hotkey
-                } catch {
-                    console.log("Failed")
+            let exists = false
+
+            for (let bind of bindings) {
+                if (bind.name === title) {
+                    exists = true
+                    try {
+                        globalShortcut.unregister(bind.key) // delete old Hotkey
+                    } catch {
+                        console.log("Failed")
+                    }
+                    bind.key = key
                 }
-                keys[keyIndex] = key
-            } else {
-                names.push(title) // If Hotkey is new, add it to the lists
-                keys.push(key)
             }
+
+            if (!exists) {
+                bindings.push({
+                    key: key,
+                    name: title
+                })
+            }
+
 
             try {
                 globalShortcut.register(key, () => {
@@ -135,7 +168,23 @@ export default class Main {
             } catch (error) {
                 console.log(error)
             }
+
+            console.log(bindings)
         })
+    }
+
+
+    private static listenerRecording() {
+        ipcMain.on('APP_saveRecording', async (event, data) => {
+            const { filePath } = await dialog.showSaveDialog({
+                buttonLabel: 'Save Audio',
+                defaultPath: `audio-${Date.now()}.wav`
+            })
+
+            fspromise.writeFile(filePath, data)
+                .then(event.reply('APP_saveSuccess', true))
+                .catch((e) => console.log(e))
+        } )
     }
 
         
@@ -153,6 +202,8 @@ export default class Main {
         this.listenerHotkey()
         this.listenerClose()
         this.listenerMin()
+        this.listenerRecording()
+        this.listenerListFiles()
     }
 }
 

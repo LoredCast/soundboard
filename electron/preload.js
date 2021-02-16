@@ -28,6 +28,8 @@ function callMyCapturer(options, ...args) {
 }
 
 
+
+
 contextBridge.exposeInMainWorld(
     'myIpcRenderer', {
         invoke: (...args) => callIpcRenderer('invoke', ...args),

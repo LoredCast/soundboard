@@ -87,13 +87,15 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     }
 
     useEffect(() => {
+        setShortcut('')
+        setShortcutText('')
         loadHotkey()
     }, [props.name]) 
     
     useEffect(() =>{
         setPrimaryOutput(props.outputs[0])
         setSecondaryOutput(props.outputs[1])
-    }, [props.outputs, props.name, shortcut])
+    }, [props.outputs, props.name])
     
     
     useEffect(() => {
@@ -106,7 +108,7 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
         })
 
         props.name && shortcut && localStorage.setItem(props.name, shortcut)
-    }, [shortcut, props.name])
+    }, [shortcut])
     
     useEffect(() => {
        primaryAudioRef.current!.volume = props.volume
@@ -135,7 +137,7 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
                 onMouseOut={() => handleButtonHover('out')}
                 onMouseEnter={() => handleButtonHover('in')}
                 onKeyDown={handleKeyDown}>
-            {props.name && props.name.slice(0, props.name.indexOf('.mp3'))} <br/>
+            {props.name && props.name.slice(0, props.name.indexOf('.'))} <br/>
             {shortcutText}
         </button>
     </div>

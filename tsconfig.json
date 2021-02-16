@@ -7,6 +7,7 @@
       "esnext"
     ],
     "types": [
+        "dom-mediacapture-record",
         "node",
     ],
     "allowJs": true,
