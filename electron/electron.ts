@@ -8,6 +8,12 @@ import { autoUpdater } from "electron-updater"
 
 const fspromise = fs.promises
 
+interface Bind {
+    key:string,
+    name:string
+}
+
+
 class AppUpdater {
   constructor() {
     autoUpdater.checkForUpdatesAndNotify()
@@ -54,8 +60,8 @@ export default class Main {
     }
 
     private static async listAudioFiles(dir : string) {
-        let paths = []
-        let fileNames = []
+        let paths : string[] = []
+        let fileNames : string[] = []
 
         await fspromise.readdir(dir).then((files)  => {
             for (const file of files) {
@@ -129,12 +135,13 @@ export default class Main {
         })
     }
 
+    
 
     private static listenerHotkey() {
         let keys : string[] = [] // Keep track of keys 
         let names : string[] = [] // Corrosponding File Names for Shortcuts
 
-        let bindings = []
+        let bindings : Bind[] = []
 
         ipcMain.on('APP_setkey', (event, key : string, title : string, ...args) => {
             
@@ -181,7 +188,7 @@ export default class Main {
                 defaultPath: `audio-${Date.now()}.wav`
             })
 
-            fspromise.writeFile(filePath, data)
+            if (filePath) fspromise.writeFile(filePath, data)
                 .then(event.reply('APP_saveSuccess', true))
                 .catch((e) => console.log(e))
         } )
