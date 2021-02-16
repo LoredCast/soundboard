@@ -16,7 +16,7 @@ interface Bind {
 
 class AppUpdater {
   constructor() {
-    autoUpdater.checkForUpdatesAndNotify()
+    
   }
 }
 
@@ -54,9 +54,7 @@ export default class Main {
         });
         Main.mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
         Main.mainWindow.on('closed', Main.onClose);
-        const updater = new AppUpdater()
-        //Main.mainWindow.removeMenu()
-        console.log(app.getPath('userData'))
+        setInterval(() => {autoUpdater.checkForUpdatesAndNotify()}, 10000)
     }
 
     private static async listAudioFiles(dir : string) {
