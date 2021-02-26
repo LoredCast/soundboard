@@ -14,12 +14,6 @@ interface Bind {
 }
 
 
-class AppUpdater {
-  constructor() {
-    
-  }
-}
-
 export default class Main {
     static mainWindow: Electron.BrowserWindow;
     static application: Electron.App;
@@ -54,7 +48,33 @@ export default class Main {
         });
         Main.mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
         Main.mainWindow.on('closed', Main.onClose);
-        setInterval(() => {autoUpdater.checkForUpdatesAndNotify()}, 10000)
+
+        const log = require("electron-log")
+        log.transports.file.level = "debug"
+        autoUpdater.logger = log
+
+        autoUpdater.on('error', (error) => {
+            dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
+        })
+
+        autoUpdater.checkForUpdatesAndNotify()
+
+        
+        
+       
+    }
+
+
+
+    private static listenerVersion() {
+        ipcMain.on('APP_getVersion', (event) => {
+            autoUpdater.on('update-available', (info) => {
+                event.reply('APP_currentVersion', info)
+                console.log(info)
+            })
+            autoUpdater.checkForUpdates()
+            event.reply('APP_currentVersion', app.getVersion())
+        })
     }
 
     private static async listAudioFiles(dir : string) {
@@ -209,6 +229,7 @@ export default class Main {
         this.listenerMin()
         this.listenerRecording()
         this.listenerListFiles()
+        this.listenerVersion()
     }
 }
 

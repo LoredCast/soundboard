@@ -255,3 +255,15 @@ option {
     -webkit-transform: scale(1.0);
   }
 }
+
+
+#version {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+#version h1 {
+    font-weight: 100;
+    color: #434c5e;
+}
