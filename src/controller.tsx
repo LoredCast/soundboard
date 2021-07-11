@@ -16,9 +16,14 @@ const Controller : React.FunctionComponent = () => {
     
     const [volume, setVolume] = useState<number>(1.0)
     const [virtualVolume, setVirtualVolume] = useState<number>(1.0)
+
+    const volumeRef = useRef<HTMLInputElement>(null)
+    const virtualVolumeRef = useRef<HTMLInputElement>(null)
     
     const primaryRef = useRef<HTMLSelectElement>(null)
     const secondaryRef = useRef<HTMLSelectElement>(null)
+
+
 
 
 
@@ -33,6 +38,9 @@ const Controller : React.FunctionComponent = () => {
     }
 
     const loadConfig = () => {
+
+        // Load primary and secondary output settings
+
         let output_1 = localStorage.getItem('primary_output')
         if (output_1) setSelectedPrimaryOutput(output_1)
 
@@ -59,11 +67,31 @@ const Controller : React.FunctionComponent = () => {
             return 0
         })
 
+        // Load Pad File Paths and names
+
         let loaded_paths = localStorage.getItem("paths");
         if (loaded_paths) setPaths(JSON.parse(loaded_paths))
 
         let loaded_names = localStorage.getItem("names");
         if (loaded_names) setPadNames(JSON.parse(loaded_names))
+
+        // Load Volume Sliders
+
+        let loaded_virtualVolume = localStorage.getItem("virtualVolume")
+        if (loaded_virtualVolume) {
+            setVirtualVolume(parseFloat(loaded_virtualVolume))
+            setSliderStyle(virtualVolumeRef.current!, parseFloat(loaded_virtualVolume))
+            virtualVolumeRef.current!.value = (parseFloat(loaded_virtualVolume) * 50).toString() // Scale back to 0 - 50
+        }
+        
+
+        let loaded_volume = localStorage.getItem("volume")
+        if (loaded_volume) {
+            setVirtualVolume(parseFloat(loaded_volume))
+            setSliderStyle(volumeRef.current!, parseFloat(loaded_volume))
+            volumeRef.current!.value = (parseFloat(loaded_volume) * 50).toString() // Scale back to 0 - 50
+        }
+
     
     }
 
@@ -95,18 +123,24 @@ const Controller : React.FunctionComponent = () => {
         myIpcRenderer.invoke('APP_showDialog')
     }
 
+    const setSliderStyle = (e: HTMLInputElement, progress : number) => {
+        e.style.background = 'linear-gradient(to right, #d08770 0%, #d08770 ' + progress * 100 + '%, #3b4252 ' + progress * 100 + '%, #3b4252 100%)' // Just CSS Stuff to make the slider work
+    }
+
     const handleVirtualVolumeChange = (e:React.FormEvent<HTMLInputElement>) => {
         let val = parseFloat(e.currentTarget.value)/50  // Scale Input to 0.0 - 1.0
         setVirtualVolume(val)
-        e.currentTarget.style.background = 'linear-gradient(to right, #d08770 0%, #d08770 ' + val*100 + '%, #3b4252 ' + val*100 + '%, #3b4252 100%)' // Just CSS Stuff to make the slider work
+        localStorage.setItem("virtualVolume", val.toString())
+        setSliderStyle(e.currentTarget, val)
     
     }
     
     const handleVolumeChange = (e:React.FormEvent<HTMLInputElement>) => {
         let val = parseFloat(e.currentTarget.value)/50  // Scale Input to 0.0 - 1.0
         setVolume(val)
-        e.currentTarget.style.background = 'linear-gradient(to right, #d08770 0%, #d08770 ' + val*100 + '%, #3b4252 ' + val*100 + '%, #3b4252 100%)' // Just CSS Stuff to make the slider work
-
+        
+        localStorage.setItem("volume", val.toString())
+        setSliderStyle(e.currentTarget, val)
     }
     
 
@@ -136,11 +170,11 @@ const Controller : React.FunctionComponent = () => {
                 <div id="sliderWrapper">
                     <div>
                         <h2>Your Volume</h2>
-                        <input className="slider" type="range" min="0" max="50" onInput={handleVolumeChange} ></input>
+                        <input className="slider" type="range" min="0" max="50" onInput={handleVolumeChange} ref={volumeRef}></input>
                     </div>
                     <div>
                         <h2>Virtual Volume</h2>
-                        <input className="slider"type="range" min="0" max="50" onInput={handleVirtualVolumeChange}></input>
+                        <input className="slider" type="range" min="0" max="50" onInput={handleVirtualVolumeChange} ref={virtualVolumeRef}></input>
                     </div>
                 </div>
 

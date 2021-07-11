@@ -1,5 +1,6 @@
 html {
   scroll-behavior: smooth;
+  cursor: default;
 }
 
 :root::-webkit-scrollbar {
@@ -34,7 +35,7 @@ header {
 
 .option {
     padding: 5px 12px 5px 12px;
-    cursor: pointer;
+    cursor: default;
     border: none;
     -webkit-app-region: no-drag;
 }
@@ -44,13 +45,14 @@ header {
 }
 
 .pad {
+    word-break: break-word;
     background-color: #8fbcbb;
     border: none;
     border-radius: 10px;
     color: white;
     padding: 10px;
-    width: 15vw;
-    height: 75px;
+    width: 140px;
+    height: 90px;
 }
 
 button {
@@ -59,13 +61,13 @@ button {
     border: none;
     padding: 1em;
     border-radius: 10px;
-    transition-duration: 150ms;
-    transition-timing-function: ease-out;
+    transition-duration: 75ms;
+    cursor: default;
 }
 
 button:hover {
     background-color: #434c5e;
-    cursor: pointer;
+    
 }
 
 button:active {
@@ -74,7 +76,7 @@ button:active {
 
 .pad:hover {
     background-color: #d08770;
-    cursor: pointer;
+    
 }
 
 .pad:active {
@@ -125,7 +127,7 @@ button:active {
 }
 
 button {
-    min-width: 200px;
+    min-width: 70px;
     height: 50px;
 }
 
@@ -178,7 +180,7 @@ option {
     height: 25px;
     border-radius: 5px;
     background: #e29178; /* Green background */
-    cursor: pointer; /* Cursor on hover */
+    cursor: default; /* Cursor on hover */
   }
 
 #outputs {
@@ -266,4 +268,23 @@ option {
 #version h1 {
     font-weight: 100;
     color: #434c5e;
+}
+
+
+.btn-clicked {
+    background-color:#2e3440;
+    color: #3b4252;    
+}
+
+.btn-clicked:hover {
+    background-color:#2e3440;
+    color: #3b4252;    
+}
+
+.btn-important {
+    background-color:#88455e;
+}
+
+.btn-important:hover {
+    background-color:#7a3e54;
 }

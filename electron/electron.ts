@@ -4,7 +4,7 @@ import { app, BrowserWindow, ipcMain, dialog, globalShortcut } from 'electron'
 import fs from 'fs'
 import mime from 'mime'
 import { IpcMainEvent } from 'electron/main'
-import { autoUpdater } from "electron-updater"
+import { autoUpdater } from "electron-updater" 
 
 const fspromise = fs.promises
 
@@ -56,24 +56,26 @@ export default class Main {
         autoUpdater.on('error', (error) => {
             dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
         })
-
-        autoUpdater.checkForUpdatesAndNotify()
-
-        
-        
-       
+        if (!isDev) {
+            autoUpdater.checkForUpdatesAndNotify()
+            console.log("Checking for updates 1")
+        } 
     }
 
 
 
     private static listenerVersion() {
         ipcMain.on('APP_getVersion', (event) => {
-            autoUpdater.on('update-available', (info) => {
-                event.reply('APP_currentVersion', info)
-                console.log(info)
-            })
-            autoUpdater.checkForUpdates()
-            event.reply('APP_currentVersion', app.getVersion())
+            if (!isDev) {
+                autoUpdater.on('update-available', (info) => {
+                    event.reply('APP_currentVersion', info)
+                    console.log(info)
+                })
+                autoUpdater.checkForUpdates()
+                event.reply('APP_currentVersion', app.getVersion())
+            } else {
+                event.reply('APP_currentVersion', "DEV")
+            }
         })
     }
 
@@ -203,7 +205,8 @@ export default class Main {
         ipcMain.on('APP_saveRecording', async (event, data) => {
             const { filePath } = await dialog.showSaveDialog({
                 buttonLabel: 'Save Audio',
-                defaultPath: `audio-${Date.now()}.wav`
+                defaultPath: `audio-${Date.now()}`,
+                filters: [{ name: 'Audio', extensions: ['wav'] },]
             })
 
             if (filePath) fspromise.writeFile(filePath, data)

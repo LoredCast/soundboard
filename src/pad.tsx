@@ -1,5 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react'
+import Colorselect from './Colorselect'
 const { myIpcRenderer } = window
+
+
 
 type padProps = {
     outputs : string[]
