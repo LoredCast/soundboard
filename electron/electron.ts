@@ -1,6 +1,6 @@
 import path from 'path'
 import isDev from'electron-is-dev'
-import { app, BrowserWindow, ipcMain, dialog, globalShortcut } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, globalShortcut, Tray, Menu } from 'electron'
 import fs from 'fs'
 import mime from 'mime'
 import { IpcMainEvent } from 'electron/main'
@@ -19,6 +19,9 @@ export default class Main {
     static application: Electron.App;
     static BrowserWindow;
     static HotkeyEvent : IpcMainEvent
+    static tray : Tray
+    static Menu : Menu
+    
 
     private static onWindowAllClosed() {
         if (process.platform !== 'darwin') {
@@ -49,6 +52,14 @@ export default class Main {
         Main.mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
         Main.mainWindow.on('closed', Main.onClose);
 
+        
+
+        
+
+        Main.mainWindow.on("minimize", (e) => {
+            e.preventDefault();
+        })
+
         const log = require("electron-log")
         log.transports.file.level = "debug"
         autoUpdater.logger = log
@@ -58,8 +69,36 @@ export default class Main {
         })
         if (!isDev) {
             autoUpdater.checkForUpdatesAndNotify()
-            console.log("Checking for updates 1")
-        } 
+            console.log("Checking for updates!")
+        }
+        
+        
+
+        var contextMenu = Menu.buildFromTemplate([
+            {
+                label: 'Show SoundBoard', click: function () {
+                    Main.mainWindow.show();
+                }
+            },
+
+            {
+                label: 'Quit', click: function () {
+                    Main.application.quit();
+                }
+            },
+            {type: 'separator'},
+            {
+                label: app.getVersion()
+            }
+        ]);
+
+        Main.tray = new Tray(path.join(__dirname, '../build/icon.png'))
+        Main.tray.setContextMenu(contextMenu)
+        Main.tray.setToolTip('Soundboard')
+        Main.tray.addListener('click', (e) => {
+            Main.mainWindow.show()
+        })
+
     }
 
 
@@ -151,9 +190,11 @@ export default class Main {
 
     private static listenerMin() {
         ipcMain.handle('APP_min', (event, ...args) => {
-            Main.mainWindow.minimize()
+            Main.mainWindow.hide()
         })
     }
+
+    
 
     
 
@@ -223,9 +264,15 @@ export default class Main {
         // so this class has no dependencies. This 
         // makes the code easier to write tests for 
         Main.BrowserWindow = browserWindow;
+        
         Main.application = app;
         Main.application.on('window-all-closed', Main.onWindowAllClosed);
         Main.application.on('ready', Main.onReady);
+        
+        
+        
+        
+
         this.listenerFileSelection()
         this.listenerHotkey()
         this.listenerClose()
