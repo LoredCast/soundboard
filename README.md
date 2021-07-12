@@ -8,7 +8,7 @@ Simple Soundboard with a nice Nord UI
 
 #### Building from Source (recommended)
 Because the release is not signed, its probably better to build from source.
-Make sure you have a working `git`, `node` and `yarn` installaion.
+Make sure you have a working `git`, `node` and `yarn` installation.
 Clone the source code to your machine: 
 
 ```
