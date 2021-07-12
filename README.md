@@ -2,7 +2,7 @@
 
 Simple Soundboard with a nice Nord UI
 
-![Image](./img/ui.png)
+![Image](./img/ui2.png)
 
 ## Installation
 
