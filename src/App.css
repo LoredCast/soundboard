@@ -1,3 +1,16 @@
+:root {
+    --background-dark: #2e3440;
+    --background: #3b4252;
+    --background-light: #434c5e;
+    --text: #ffffff;
+    --option-bg: rgb(216, 57, 91);
+    --accent1: #8fbcbb;
+    --accent2: #d08770;
+    --accent2-dark: #af7360;
+    --accent2-light: #e29178;
+    --border: rgba(255, 255, 255, 0.356);
+}
+
 html {
   scroll-behavior: smooth;
   cursor: default;
@@ -9,12 +22,12 @@ html {
 
 body {
     font-size: 12px;
-    background-color: #2e3440;
-    color: rgb(37, 57, 94);
+    background-color: var(--background-dark);
+    color: var(--text);
 }
 
 h2 {
-    color: white;
+    color: var(--text);
     font-size: 1em;
     text-transform: uppercase;
 }
@@ -24,8 +37,8 @@ header {
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-start;
-    background-color: #2e3440;
-    color: #ffffff;
+    background-color: var(--background-dark);
+    color: var(--text)f;
     width: 100%;
     font-size: 2em;
     position: fixed;
@@ -41,23 +54,23 @@ header {
 }
 
 .option:hover {
-    background-color: rgb(216, 57, 91);
+    background-color: var(--option-bg);
 }
 
 .pad {
     word-break: break-word;
-    background-color: #8fbcbb;
+    background-color: var(--accent1);
     border: none;
     border-radius: 10px;
-    color: white;
+    color: var(--text);
     padding: 10px;
     width: 140px;
     height: 90px;
 }
 
 button {
-    background-color: #3b4252;
-    color: white;
+    background-color: var(--background);
+    color: var(--text);
     border: none;
     padding: 1em;
     border-radius: 10px;
@@ -66,21 +79,21 @@ button {
 }
 
 button:hover {
-    background-color: #434c5e;
+    background-color: var(--background-light);
     
 }
 
 button:active {
-    background-color: #3b4252;
+    background-color: var(--background);
 }
 
 .pad:hover {
-    background-color: #d08770;
+    background-color: var(--accent2);
     
 }
 
 .pad:active {
-    background-color:#af7360 ;
+    background-color: var(--accent2-dark);
 }
 
 
@@ -101,7 +114,7 @@ button:active {
     
 
     justify-content: center;
-    border: solid rgba(255, 255, 255, 0.356) 1px;
+    border: solid var(--border) 1px;
     border-radius: 10px;
     margin: 30px;
     margin-left: 0;
@@ -117,7 +130,7 @@ button:active {
     flex-flow: column wrap;
     margin-top: 0;
     margin-bottom: 0;
-    border: solid rgba(255, 255, 255, 0.356) 1px;
+    border: solid var(--border) 1px;
     border-radius: 10px;
     padding: 30px;
     row-gap: 10px;
@@ -136,8 +149,8 @@ button {
 }
 
 select {
-    background-color:#3b4252;
-    color: white;
+    background-color: var(--background);
+    color: var(--text);
     border: none;
     border-radius: 10px;
     padding: 1em;
@@ -160,7 +173,7 @@ option {
     flex-flow: column;
     justify-content: space-around;
     padding: 30px;
-    border: solid rgba(255, 255, 255, 0.356) 1px;
+    border: solid var(--border) 1px;
     border-radius: 10px;
     
 }
@@ -169,7 +182,7 @@ option {
     width: 100%;
     -webkit-appearance: none;  /* Override default CSS styles */
     height: 20px; /* Specified height */
-    background: linear-gradient(to right,#d08770 0%, #d08770 100%, #3b4252 100%, #3b4252 100%);
+    background: linear-gradient(to right,var(--accent2) 0%, var(--accent2) 100%, var(--background) 100%, var(--background) 100%);
     border-radius: 5px;
 }
 
@@ -179,7 +192,7 @@ option {
     width: 25px; /* Set a specific slider handle width */
     height: 25px;
     border-radius: 5px;
-    background: #e29178; /* Green background */
+    background: var(--accent2-light); /* Green background */
     cursor: default; /* Cursor on hover */
   }
 
@@ -201,7 +214,7 @@ option {
     justify-content: center;
     row-gap: 25px;
     padding: 30px;
-    border: solid rgba(255, 255, 255, 0.356) 1px;
+    border: solid var(--border) 1px;
     border-radius: 10px;
 }
 
@@ -267,18 +280,18 @@ option {
 
 #version h1 {
     font-weight: 100;
-    color: #434c5e;
+    color: var(--background-light);
 }
 
 
 .btn-clicked {
-    background-color:#2e3440;
-    color: #3b4252;    
+    background-color: var(--background-dark);
+    color: var(--background);    
 }
 
 .btn-clicked:hover {
-    background-color:#2e3440;
-    color: #3b4252;    
+    background-color: var(--background-dark);
+    color: var(--background);    
 }
 
 .btn-important {
