@@ -2,7 +2,9 @@
     --background-dark: #2e3440;
     --background: #3b4252;
     --background-light: #434c5e;
+    --background-alpha: #2e3440da;
     --text: #ffffff;
+    --text-darker: #c0c0c0;
     --option-bg: rgb(216, 57, 91);
     --accent1: #8fbcbb;
     --accent2: #d08770;
@@ -46,6 +48,74 @@ header {
     -webkit-app-region: drag;
 }
 
+
+.settings-wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}   
+
+.settings-box {
+    position: relative;
+    padding: 1em;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 500px;
+    height: 80%;
+    background-color: var(--background);
+    box-shadow: rgba(0, 0, 0, 0.555) 0px 0px 100px;
+}
+
+#settings-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#settings-header p {
+    position: relative;
+    text-align: right;
+    margin: 0;
+    color: var(--text-darker);
+    transition-duration: 0.3s;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#settings-header p:hover {
+    color: var(--text);
+}
+
+
+.option-light {
+    padding: 5px 12px 5px 12px;
+    cursor: default;
+    border: none;
+    -webkit-app-region: no-drag;
+    transition: ease-in;
+    transition-duration: 0.1s;
+    display: flex;
+    align-items: center;
+}
+
+.option-light div {
+    transition-duration: 0.2s;
+    color: var(--text-darker);
+    
+}
+
+.option-light div:hover {
+    color: var(--text);
+
+}
+
 .option {
     padding: 5px 12px 5px 12px;
     cursor: default;
@@ -56,6 +126,41 @@ header {
 .option:hover {
     background-color: var(--option-bg);
 }
+
+.theme-selector {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    max-height: 90%;
+
+}
+
+.theme-selector div {
+    width: 100%;
+}
+
+.seperator {
+    width: 100%;
+    height: 1px;
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+
+    background-color: var(--background-light);
+}
+
+.color-setting {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.color-setting label {
+    font-size: 0.7em;
+
+}
+
+
 
 .pad {
     word-break: break-word;
