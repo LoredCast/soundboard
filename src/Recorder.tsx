@@ -1,4 +1,3 @@
-import './App.css';
 import React, { MouseEventHandler, useEffect, useRef, useState } from 'react'
 
 const { myIpcRenderer } = window
