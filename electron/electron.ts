@@ -125,7 +125,7 @@ export default class Main {
         await fspromise.readdir(dir).then((files)  => {
             for (const file of files) {
                 let filePath = path.join(dir, file)
-                if (mime.getType(filePath) === 'audio/mpeg' || mime.getType(filePath) === 'audio/wav') {
+                if (mime.getType(filePath) === 'audio/mpeg' || mime.getType(filePath) === 'audio/wav' || mime.getType(filePath) === 'audio/ogg') {
                     paths.push(path.join(dir, file))
                     fileNames.push(file)
                 }
