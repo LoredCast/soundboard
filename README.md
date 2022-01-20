@@ -2,15 +2,18 @@
 
 Simple Soundboard with a nice Nord UI
 
-![Image](./img/ui.png)
+![Image](./img/ui2.png)
 
 ## Installation
 
-#### Building from Source
+#### Building from Source (recommended)
 Because the release is not signed, its probably better to build from source.
-`git clone` the source code to your machine. Make sure to have `yarn` installed, then in the directory:
+Make sure you have a working `git`, `node` and `yarn` installation.
+Clone the source code to your machine: 
 
 ```
+git clone https://github.com/LoredCast/soundboard.git
+cd soundboard
 yarn install
 yarn build
 yarn electron-build
