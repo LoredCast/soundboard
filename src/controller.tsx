@@ -87,7 +87,7 @@ const Controller : React.FunctionComponent = () => {
 
         let loaded_volume = localStorage.getItem("volume")
         if (loaded_volume) {
-            setVirtualVolume(parseFloat(loaded_volume))
+            setVolume(parseFloat(loaded_volume))
             setSliderStyle(volumeRef.current!, parseFloat(loaded_volume))
             volumeRef.current!.value = (parseFloat(loaded_volume) * 50).toString() // Scale back to 0 - 50
         }
@@ -138,7 +138,6 @@ const Controller : React.FunctionComponent = () => {
     const handleVolumeChange = (e:React.FormEvent<HTMLInputElement>) => {
         let val = parseFloat(e.currentTarget.value)/50  // Scale Input to 0.0 - 1.0
         setVolume(val)
-        
         localStorage.setItem("volume", val.toString())
         setSliderStyle(e.currentTarget, val)
     }

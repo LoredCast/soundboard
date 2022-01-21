@@ -114,9 +114,12 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     }, [shortcut])
     
     useEffect(() => {
-       primaryAudioRef.current!.volume = props.volume
-       secondaryAudioRef.current!.volume = props.virtualVolume
+        primaryAudioRef.current!.volume = props.volume
+        secondaryAudioRef.current!.volume = props.virtualVolume
+        
     }, [props.volume, props.virtualVolume])
+
+
 
     const handleButtonHover = (state: string) => {
         if (state === 'in') {
