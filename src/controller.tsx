@@ -124,7 +124,13 @@ const Controller : React.FunctionComponent = () => {
     }
 
     const setSliderStyle = (e: HTMLInputElement, progress : number) => {
-        e.style.background = 'linear-gradient(to right, #d08770 0%, #d08770 ' + progress * 100 + '%, #3b4252 ' + progress * 100 + '%, #3b4252 100%)' // Just CSS Stuff to make the slider work
+        let accent2 = document.documentElement.style.getPropertyValue('--accent2')
+
+        let background = document.documentElement.style.getPropertyValue('--background')
+
+
+
+        e.style.background = 'linear-gradient(to right, '+ accent2 + ' 0%, ' + accent2 + ' ' + progress * 100 + '%, ' + background +  ' ' + progress * 100 + '%, ' + background + ' 100%)' // Just CSS Stuff to make the slider work
     }
 
     const handleVirtualVolumeChange = (e:React.FormEvent<HTMLInputElement>) => {

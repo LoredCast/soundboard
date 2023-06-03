@@ -1,15 +1,12 @@
 import './App.css';
 import React, { useEffect, useState } from 'react'
 import Controller from './controller'
+import { Settings } from './Settings';
 const { myIpcRenderer } = window
 
 
-
-
-
-
 const Menu : React.FunctionComponent = () => {
-
+    const [showSettings, setShowSettings] = useState(false)
 
     const handleClose = () => {
         myIpcRenderer.invoke('APP_close')
@@ -19,10 +16,18 @@ const Menu : React.FunctionComponent = () => {
         myIpcRenderer.invoke('APP_min')
     }
 
+    const handleSettings = () => {
+        setShowSettings(!showSettings)
+    }
+
+    
+
     return(<header>
         
         <div className="option" onClick={handleClose}>X</div>
         <div className="option" onClick={handleMin}>-</div>
+        <div className="option-light" onClick={handleSettings}><div>...</div></div>
+        { showSettings && <Settings toggle={handleSettings}></Settings> }
     </header>)
 }
 
