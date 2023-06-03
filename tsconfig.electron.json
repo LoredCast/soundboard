@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": false,
-    "outDir": "./build",
+    "outDir": "./build/",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
