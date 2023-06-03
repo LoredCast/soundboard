@@ -114,9 +114,14 @@ const Pad : React.FunctionComponent<padProps> = (props : padProps) => {
     }, [shortcut])
     
     useEffect(() => {
-       primaryAudioRef.current!.volume = props.volume
-       secondaryAudioRef.current!.volume = props.virtualVolume
+
+        // Apply logarithmic scaling of linear 0 ... 1 scale to 0 ... 1 logarithmic (not perfectly accurate decibel scale)
+        primaryAudioRef.current!.volume = Math.exp((Math.log(props.volume) / Math.log(10)) * 4)
+        secondaryAudioRef.current!.volume = Math.exp((Math.log(props.virtualVolume) / Math.log(10)) * 4)
+        
     }, [props.volume, props.virtualVolume])
+
+
 
     const handleButtonHover = (state: string) => {
         if (state === 'in') {
