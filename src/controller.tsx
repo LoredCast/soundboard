@@ -87,7 +87,7 @@ const Controller : React.FunctionComponent = () => {
 
         let loaded_volume = localStorage.getItem("volume")
         if (loaded_volume) {
-            setVirtualVolume(parseFloat(loaded_volume))
+            setVolume(parseFloat(loaded_volume))
             setSliderStyle(volumeRef.current!, parseFloat(loaded_volume))
             volumeRef.current!.value = (parseFloat(loaded_volume) * 50).toString() // Scale back to 0 - 50
         }
@@ -124,11 +124,9 @@ const Controller : React.FunctionComponent = () => {
     }
 
     const setSliderStyle = (e: HTMLInputElement, progress : number) => {
-        let accent2 = document.documentElement.style.getPropertyValue('--accent2')
-
-        let background = document.documentElement.style.getPropertyValue('--background')
-
-
+        let doc = getComputedStyle(document.body)
+        let accent2 = doc.getPropertyValue('--accent2')
+        let background = doc.getPropertyValue('--background')
 
         e.style.background = 'linear-gradient(to right, '+ accent2 + ' 0%, ' + accent2 + ' ' + progress * 100 + '%, ' + background +  ' ' + progress * 100 + '%, ' + background + ' 100%)' // Just CSS Stuff to make the slider work
     }
