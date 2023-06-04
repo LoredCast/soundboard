@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;0,600;0,900;1,300&display=swap');
 :root {
     --background-dark: #2e3440;
     --background: #3b4252;
@@ -13,9 +14,11 @@
     --border: rgba(255, 255, 255, 0.356);
 }
 
+
 html {
-  scroll-behavior: smooth;
-  cursor: default;
+    scroll-behavior: smooth;
+    cursor: default;
+    font-family: 'Poppins', sans-serif;
 }
 
 :root::-webkit-scrollbar {
@@ -23,15 +26,22 @@ html {
 }
 
 body {
+    
     font-size: 12px;
     background-color: var(--background-dark);
     color: var(--text);
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100;
 }
 
 h2 {
     color: var(--text);
     font-size: 1em;
     text-transform: uppercase;
+    user-select: none;
 }
 
 
@@ -56,6 +66,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
 }   
 
 .settings-box {
@@ -171,16 +182,21 @@ header {
     padding: 10px;
     width: 140px;
     height: 90px;
+    user-select: none;
+    font-weight: 100;
 }
 
 button {
     background-color: var(--background);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100;
     color: var(--text);
     border: none;
     padding: 1em;
     border-radius: 10px;
     transition-duration: 75ms;
     cursor: default;
+    user-select: none;
 }
 
 button:hover {
@@ -242,6 +258,7 @@ button:active {
     grid-column-start: 1;
     grid-column-end: 3;
     justify-content: center;
+    user-select: none;
 }
 
 button {
@@ -261,6 +278,13 @@ select {
     padding: 1em;
     height: 50px;
     width: 100%;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100;
+    
+}
+
+select::content {
+    padding: 3em;
 }
 
 option {
@@ -305,6 +329,9 @@ option {
     display: flex;
     flex-flow: row;
     column-gap: 10px;
+    user-select: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100;
 }
 #settings {
     display: grid;
@@ -381,6 +408,7 @@ option {
     display: flex;
     width: 100%;
     justify-content: center;
+    user-select: none;
 }
 
 #version h1 {
