@@ -9,6 +9,7 @@
     "types": [
         "dom-mediacapture-record",
         "node",
+        "jest"
     ],
     "allowJs": true,
     "skipLibCheck": true,

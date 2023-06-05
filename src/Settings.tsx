@@ -1,5 +1,5 @@
-import { ChangeEvent, useState } from "react"
-
+import { ChangeEvent, useEffect, useState } from "react"
+const { myIpcRenderer } = window
 type props = {
     toggle: any
 }
@@ -21,6 +21,7 @@ const variables = [
 
 
 export const Settings : React.FunctionComponent<props> = ({children, toggle}) => {
+    
 
     const [col, setCol] = useState('')
 
@@ -32,6 +33,11 @@ export const Settings : React.FunctionComponent<props> = ({children, toggle}) =>
 
         document.documentElement.style.setProperty(name, color)
     }
+
+    useEffect(() => {
+        myIpcRenderer.send("APP_saveSettings", 'test')
+    })
+
     
     return(
     

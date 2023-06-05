@@ -5,7 +5,7 @@ import fs from 'fs'
 import mime from 'mime'
 import { IpcMainEvent } from 'electron/main'
 import { autoUpdater } from "electron-updater" 
-
+import saveConfig from './settings'
 const fspromise = fs.promises
 
 interface Bind {
@@ -256,6 +256,11 @@ export default class Main {
         } )
     }
 
+        private static listenerSettings() {
+        ipcMain.on('APP_saveSettings', async (event, key, value) => {
+            saveConfig(key, value)
+        })
+    }
         
 
     static main(app: Electron.App, browserWindow: typeof BrowserWindow) {
@@ -272,7 +277,7 @@ export default class Main {
         
         
         
-
+        this.listenerSettings()
         this.listenerFileSelection()
         this.listenerHotkey()
         this.listenerClose()

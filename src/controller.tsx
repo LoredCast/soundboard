@@ -1,4 +1,3 @@
-import { readlink } from 'fs'
 import React, { useRef, useState, useEffect } from 'react'
 import Pad from './pad'
 import Recorder from './Recorder'
